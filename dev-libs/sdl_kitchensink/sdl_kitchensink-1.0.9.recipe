@@ -31,8 +31,8 @@ REQUIRES="
 
 PROVIDES_devel="
 	sdl_kitchensink${secondaryArchSuffix}_devel = $portVersion
-	devel:libSDL_kitchensink$secondaryArchSuffix = $portVersion
-	devel:libSDL_kitchensink_static$secondaryArchSuffix = $portVersion
+	devel:libsdl_kitchensink$secondaryArchSuffix = $portVersion
+	devel:libsdl_kitchensink_static$secondaryArchSuffix = $portVersion
 	"
 REQUIRES_devel="
 	sdl_kitchensink$secondaryArchSuffix == $portVersion base
@@ -52,18 +52,22 @@ BUILD_PREREQUIRES="
 
 
 BUILD() {
-	cmake  -DCMAKE_BUILD_TYPE=Release $cmakeDirArgs .
+	mkdir -p build
+	cd build
+	cmake  -DCMAKE_BUILD_TYPE=Release $cmakeDirArgs ..
 	make $jobArgs
 }
 
 INSTALL() {
-	make install
 	mkdir -p $developDir/lib
+	
+	cd build
+	make install
+	
 	mv $libDir/libSDL_kitchensink_static.a $developDir/lib
 	
-	fixPkgconfig
 	prepareInstalledDevelLib libSDL_kitchensink
-	
+	fixPkgconfig
 	packageEntries devel \
-		"$developDir"
+		$developDir
 }
