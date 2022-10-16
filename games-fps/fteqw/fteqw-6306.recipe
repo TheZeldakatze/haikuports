@@ -1,0 +1,102 @@
+SUMMARY="A versatile game engine based on QuakeWorld"
+DESCRIPTION="FTE is a verstaile game engine that's originally based on QuakeWorld \
+	that runs Quake, Quake 2, Quake 3, Hexen 3 among numerous other games and mods. \
+	It supports VOIP, splitscreen and IPv6, among many more things. \
+	It also comes with fteqcc, a compiler for quake-c with an intigrated debugger. \
+	"
+HOMEPAGE="https://fte.triptohell.info/"
+COPYRIGHT="
+	1996-1997 Id Software, Inc
+	1999-2005 Id Software, Inc.
+	2001-2002 A Nourai
+	2006 Jacek Piszczek
+	2006-2007 Mark Olsen
+	2010 Jacob Meuser
+	2015-2018 Marco Cawthorne
+	(TODO Incomplete)
+	"
+LICENSE="GNU GPL v2"
+REVISION="1"
+SOURCE_URI="https://sourceforge.net/code-snapshots/svn/f/ft/fteqw/code/fteqw-code-r6306-trunk.zip"
+CHECKSUM_SHA256="e4bbc1502ee23ee5ab1d75e1edb48e0d3a2038b54d4df9aa691f6fb3f8c8fa2b"
+SOURCE_DIR="fteqw-code-r6306-trunk"
+PATCHES="fteqw-6306.patchset"
+
+ARCHITECTURES="all !x86_gcc2"
+SECONDARY_ARCHITECTURES="x86"
+
+#GLOBAL_WRITABLE_FILES
+#USER_SETTINGS_FILES
+
+PROVIDES="
+	fteqw$secondaryArchSuffix = $portVersion base
+	cmd:fteqw$secondaryArchSuffix
+	cmd:fteqw_sv$secondaryArchSuffix
+	cmd:iqmtool$secondaryArchSuffix
+	cmd:imgtool$secondaryArchSuffix
+	cmd:qtv$secondaryArchSuffix
+	cmd:ftemaster$secondaryArchSuffix
+	cmd:fteqcc$secondaryArchSuffix
+	"
+REQUIRES="
+	haiku$secondaryArchSuffix
+	lib:libavcodec$secondaryArchSuffix
+	lib:libz$secondaryArchSuffix
+	lib:libbz2$secondaryArchSuffix
+	lib:libGL$secondaryArchSuffix
+	lib:libjpeg$secondaryArchSuffix
+	lib:libpng16$secondaryArchSuffix
+	lib:libfreetype$secondaryArchSuffix
+	lib:libvorbisfile$secondaryArchSuffix
+	lib:libgnutls$secondaryArchSuffix
+	lib:libSDL2_2.0$secondaryArchSuffix
+	lib:libode$secondaryArchSuffix
+	ffmpeg${secondaryArchSuffix}_devel
+	"
+
+BUILD_REQUIRES="
+	haiku${secondaryArchSuffix}_devel
+	devel:libavcodec$secondaryArchSuffix
+	devel:libz$secondaryArchSuffix
+	devel:libzip$secondaryArchSuffix
+	devel:libGL$secondaryArchSuffix
+	devel:libjpeg$secondaryArchSuffix
+	devel:libpng16$secondaryArchSuffix
+	devel:libfreetype$secondaryArchSuffix
+	devel:libvorbisfile$secondaryArchSuffix
+	devel:libgnutls$secondaryArchSuffix
+	devel:libSDL2_2.0$secondaryArchSuffix
+	devel:libode$secondaryArchSuffix
+	ffmpeg${secondaryArchSuffix}_devel
+	"
+BUILD_PREREQUIRES="
+	cmd:cmake
+	cmd:make
+	cmd:gcc
+	cmd:pkg_config
+	cmd:zip
+	"
+
+defineDebugInfoPackage fteqw$secondaryArchSuffix \
+	$binDir/fteqw$secondaryArchSuffix \
+	$binDir/fteqw-sv$secondaryArchSuffix \
+	$binDir/iqmtool$secondaryArchSuffix \
+	$binDir/imgtool$secondaryArchSuffix \
+	$binDir/qtv$secondaryArchSuffix \
+	$binDir/ftemaster$secondaryArchSuffix \
+	$binDir/fteqcc$secondaryArchSuffix
+
+BUILD()
+{
+	cmake . -DCMAKE_BUILD_TYPE=RelWithDebInfo -DFTE_TOOL_HTTPSV=0 -DFTE_USE_SDL=1 \
+		-DSYS_LIBS="network" -DFTE_PLUG_XMPP=0 $cmakeDirArgs
+	make $jobArgs
+}
+
+INSTALL()
+{
+	mkdir $binDir
+	make install $jobArgs
+	mv $prefix/games/* $binDir
+	rmdir $prefix/games
+}
