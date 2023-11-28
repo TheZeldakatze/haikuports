@@ -1,0 +1,76 @@
+From 0e57716c22c2974670f6ab27460b6bbf499ac402 Mon Sep 17 00:00:00 2001
+From: Adrien Destugues <pulkomandy@pulkomandy.tk>
+Date: Sun, 26 Mar 2017 19:46:53 +0200
+Subject: Hack in libnetwork.
+
+I think this could be added to sdl-net config automatically?
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 6ae8b1d..96a8da9 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -239,6 +239,10 @@ if(ENABLE_TESTS)
+ 		target_link_libraries(boost_unit_tests SDL2_image::SDL2_image)
+ 		target_link_libraries(boost_unit_tests SDL2_mixer::SDL2_mixer)
+ 	endif()
++	
++	if(HAIKU)
++		target_link_libraries(boost_unit_tests network)
++	endif()
+ 
+ 	if(ENABLE_DISPLAY_REVISION)
+ 		add_dependencies(boost_unit_tests wesnoth-revision)
+@@ -283,6 +287,10 @@ if(ENABLE_SERVER)
+ 	if(WIN32)
+ 		target_link_options(wesnothd PRIVATE /WX)
+ 	endif()
++	
++	if(HAIKU)
++		target_link_libraries(wesnothd network)
++	endif()
+ 
+ 	set_target_properties(wesnothd PROPERTIES OUTPUT_NAME ${BINARY_PREFIX}wesnothd${BINARY_SUFFIX})
+ 	if(ENABLE_DISPLAY_REVISION)
+@@ -325,6 +333,10 @@ if(ENABLE_CAMPAIGN_SERVER)
+ 	if(WIN32)
+ 		target_link_options(campaignd PRIVATE /WX)
+ 	endif()
++	
++	if(HAIKU)
++		target_link_libraries(campaignd network)
++	endif()
+ 
+ 	set_target_properties(campaignd PROPERTIES OUTPUT_NAME ${BINARY_PREFIX}campaignd${BINARY_SUFFIX})
+ 	if(ENABLE_DISPLAY_REVISION)
+-- 
+2.42.0
+
+
+From 7c59576ff965a3575c20f526daa8470b2b5a9eae Mon Sep 17 00:00:00 2001
+From: Maite Gamper <victor@wenzeslaus.de>
+Date: Tue, 28 Nov 2023 21:53:54 +0100
+Subject: Compile fix for boost 1.83
+
+Required for now as wesnoth does not compile otherwise with boost 1.83
+Source: https://github.com/wesnoth/wesnoth/commit/136e651d69fc91fa7a4154f8a4a7e977cc46eca4
+
+diff --git a/src/gettext.cpp b/src/gettext.cpp
+index 8d137bd..bbfdd5a 100644
+--- a/src/gettext.cpp
++++ b/src/gettext.cpp
+@@ -168,8 +168,11 @@ namespace
+ 			}
+ 			return msg;
+ 		}
+-
++#if BOOST_VERSION < 108300
+ 		const char* get(int domain_id, const char* ctx, const char* sid, int n) const override
++#else
++ 		const char* get(int domain_id, const char* ctx, const char* sid, bl::count_type n) const override
++ #endif
+ 		{
+ 			auto& base = get_base();
+ 			const char* msg = base.get(domain_id, ctx, sid, n);
+-- 
+2.42.0
+
