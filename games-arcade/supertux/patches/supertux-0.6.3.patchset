@@ -1,0 +1,21 @@
+From 7e7f5e31051eb979d2fd8b5e1fe8b29a2acd933a Mon Sep 17 00:00:00 2001
+From: zeldakatze <mail@zeldakatze.de>
+Date: Wed, 28 Feb 2024 21:14:57 +0100
+Subject: Haiku: fix zip_manager.cpp
+
+
+diff --git a/external/partio_zip/zip_manager.cpp b/external/partio_zip/zip_manager.cpp
+index 5c0afa0..56f5d25 100644
+--- a/external/partio_zip/zip_manager.cpp
++++ b/external/partio_zip/zip_manager.cpp
+@@ -47,6 +47,7 @@ extern "C"{
+ #include <stdexcept>
+ #include <cstring>
+ #include <string>
++#include <memory>
+ 
+ #include "zip_manager.hpp"
+ 
+-- 
+2.43.2
+
