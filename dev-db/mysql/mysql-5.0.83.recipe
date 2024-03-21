@@ -9,7 +9,7 @@ CHECKSUM_SHA256="f7d3ac87693de8d0f4ddf457c268107b0d538a0b577f1c2596a8a28eb0bdd1c
 PATCHES="mysql-$portVersion.patchset"
 
 ARCHITECTURES="!x86_gcc2 !x86"
-SECONDARY_ARCHITECTURES="!x86"
+SECONDARY_ARCHITECTURES="x86"
 
 PROVIDES="
 	mysql$secondaryArchSuffix = $portVersion

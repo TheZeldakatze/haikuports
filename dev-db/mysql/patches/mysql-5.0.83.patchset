@@ -1,4 +1,4 @@
-From f76c957b3f4c07ebd5cba6d1e0d5de7bca83ece8 Mon Sep 17 00:00:00 2001
+From 294d16864dbe925928d93911981718b12ae5f027 Mon Sep 17 00:00:00 2001
 From: Begasus <begasus@gmail.com>
 Date: Fri, 1 May 2020 09:19:05 +0000
 Subject: applying patch mysql-5.0.83.patch
@@ -109,10 +109,10 @@ index 07469e4..32d196c 100644
      fprintf(info_file,"\nRun time: %.1f\n",(double) clock()/CLOCKS_PER_SEC);
  #endif
 -- 
-2.26.0
+2.43.2
 
 
-From ccb29e0e557803802c9fefda8c3df149dcb1595a Mon Sep 17 00:00:00 2001
+From 962e315d715639d42ca9f2c9da0b78c129f74185 Mon Sep 17 00:00:00 2001
 From: begasus <begasus@gmail.com>
 Date: Fri, 1 May 2020 09:37:37 +0000
 Subject: Fix conflicting types for int32 and uint32
@@ -142,10 +142,10 @@ index 31bcb77..5d2ce69 100644
  #ifndef HAVE_INT_8_16_32
  typedef long		int32;
 -- 
-2.26.0
+2.43.2
 
 
-From 3920c19db3c4835db3a386aa04744628d44044ad Mon Sep 17 00:00:00 2001
+From 55b1e0e34aca9713e42f29be953dfee66bf05561 Mon Sep 17 00:00:00 2001
 From: begasus <begasus@gmail.com>
 Date: Fri, 1 May 2020 12:23:57 +0000
 Subject: Fix invalid conversion from 'char' to 'char*'
@@ -184,5 +184,28 @@ index 571826e..db096fc 100644
    /*
      If the routine failed, we'll simply fallback to defaults in
 -- 
-2.26.0
+2.43.2
+
+
+From c5e889ffb5c97f0e7089c4aac33b2d56029143bc Mon Sep 17 00:00:00 2001
+From: zeldakatze <mail@zeldakatze.de>
+Date: Wed, 20 Mar 2024 14:45:14 +0100
+Subject: fix for x86
+
+
+diff --git a/configure.in b/configure.in
+index 16f5698..9b9406d 100644
+--- a/configure.in
++++ b/configure.in
+@@ -3057,6 +3057,8 @@ AC_SUBST([NDB_SIZEOF_INT])
+ AC_SUBST([NDB_SIZEOF_LONG])
+ AC_SUBST([NDB_SIZEOF_LONG_LONG])
+ 
++AC_DEFINE([CRAY_STACKSEG_END], [], [Description])
++
+ AC_CONFIG_FILES(ndb/Makefile ndb/include/Makefile dnl
+    ndb/src/Makefile ndb/src/common/Makefile dnl
+    ndb/docs/Makefile dnl
+-- 
+2.43.2
 
