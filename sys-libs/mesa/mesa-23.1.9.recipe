@@ -7,7 +7,7 @@ HOMEPAGE="https://www.mesa3d.org/"
 COPYRIGHT="1999-2023 Brian Paul"
 LICENSE="MIT"
 REVISION="1"
-SOURCE_URI="https://mesa.freedesktop.org/archive/mesa-${portVersion}.tar.xz"
+SOURCE_URI="https://archive.mesa3d.org/mesa-${portVersion}.tar.xz"
 CHECKSUM_SHA256="295ba27c28146ed09214e8ce79afa1659edf9d142decc3c91f804552d64f7510"
 PATCHES="mesa-$portVersion.patchset"
 
